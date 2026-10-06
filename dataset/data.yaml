@@ -1,0 +1,11 @@
+path: 'C:/Users/adhay/OneDrive/Documents/Robotics/dataset'
+train: images/train
+val: images/val
+nc: 6
+names:
+  0: ead buds
+  1: Pen
+  2: battery
+  3: watch
+  4: pendrive
+  5: sweeingum
