@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Bill Bot{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar"><a class="brand brand-link" href="{{ url_for('billing_page') }}"><span class="brand-mark">B<span>B</span></span><div><p class="eyebrow">ESP32-CAM BILLING</p><h1>Bill Bot</h1></div></a><div class="network-pill"><span class="pulse"></span><span id="network-status">Connecting</span><span class="mono">:5000</span></div></header>
+    <nav class="page-nav" aria-label="Main navigation">
+      <a class="{% if active == 'billing' %}active{% endif %}" href="{{ url_for('billing_page') }}">Bill <span>01</span></a>
+      <a class="{% if active == 'capture' %}active{% endif %}" href="{{ url_for('capture_page') }}">Capture + label <span>02</span></a>
+      {% if session.get('admin_user') %}<a class="{% if active == 'admin' %}active{% endif %}" href="{{ url_for('admin_dashboard') }}">Admin home</a><a class="{% if active == 'train' %}active{% endif %}" href="{{ url_for('train_page') }}">Train / retrain <span>03</span></a><a class="{% if active == 'prices' %}active{% endif %}" href="{{ url_for('prices_page') }}">Prices <span>04</span></a><a class="admin-link" href="{{ url_for('admin_logout') }}">Log out</a>{% else %}<a class="admin-link" href="{{ url_for('admin_login') }}">Admin login</a>{% endif %}
+    </nav>
+    {% block content %}{% endblock %}
+    <footer><span>Bill Bot</span><span class="mono">LOCAL / PRIVATE / READY</span></footer>
+  </main>
+  <script src="{{ url_for('static', filename='pages.js') }}"></script>
+</body>
+</html>

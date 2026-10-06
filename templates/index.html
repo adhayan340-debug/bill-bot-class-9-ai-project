@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bill Bot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">B<span>B</span></span><div><p class="eyebrow">ESP32-CAM BILLING</p><h1>Bill Bot</h1></div></div>
+      <div class="network-pill"><span class="pulse"></span><span id="network-status">Connecting</span><span class="mono">:5000</span></div>
+    </header>
+
+    <nav class="mode-nav" aria-label="Dashboard modes">
+      <button class="mode-button active" data-target="billing-panel">Bill mode <span>01</span></button>
+      <button class="mode-button" data-target="camera-panel">Capture + label <span>02</span></button>
+      <button class="mode-button" data-target="training-panel">Train / retrain <span>03</span></button>
+      <button class="mode-button" data-target="prices-panel">Manage prices <span>04</span></button>
+    </nav>
+
+    <section class="hero">
+      <div><p class="eyebrow accent">AUTO BILLING / CONTROL ROOM</p><h2>Turn a camera feed<br><em>into a checkout.</em></h2><p class="hero-copy">Capture your products, train the detector, then watch every tracked item become a line on the bill.</p></div>
+      <div class="hero-note"><span class="note-number">01</span><strong>One local dashboard</strong><span>Camera, training, and billing stay on your network.</span></div>
+    </section>
+
+    <section id="camera-panel" class="camera-panel panel">
+      <div class="section-head"><div><p class="eyebrow">01 / CAMERA</p><h3>Live capture bay</h3></div><span class="status-dot" id="camera-dot"></span></div>
+      <div class="camera-layout">
+        <div class="feed-wrap"><img id="video-feed" src="{{ url_for('video_feed') }}" alt="ESP32-CAM live feed"><div class="feed-label">ESP32-CAM / LIVE</div></div>
+        <div class="camera-controls">
+          <label>ESP32-CAM stream URL<input id="stream-url" value="{{ stream_url }}" placeholder="http://192.168.1.42:81/stream"></label>
+          <button class="button primary" id="connect-camera">Connect camera</button>
+          <div class="action-row compact"><button class="button ghost" id="capture-button">Capture photo <span id="capture-count">0</span></button><button class="button label-button" id="capture-label-button">Capture + AI label</button></div>
+          <p class="muted" id="capture-message">Captured images land in dataset/raw.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="columns">
+      <section id="training-panel" class="panel training-panel"><div class="section-head"><div><p class="eyebrow">03 / TRAIN</p><h3>Teach the eye</h3></div><span class="tag" id="training-tag">IDLE</span></div>
+        <div class="form-grid"><label>Dataset YAML<input id="data-path" value="dataset/data.yaml"></label><label>Starting model<input id="base-model" value="yolo11n.pt"></label><label>Epochs<input id="epochs" type="number" value="50" min="1"></label><label>Batch size<input id="batch" type="number" value="8" min="1"></label></div>
+        <div class="action-row"><button class="button primary" id="train-button">Train saved images</button><button class="button ghost" id="retrain-button">Retrain whole model</button></div>
+        <p class="muted">Both actions use the annotated dataset. Retrain starts a fresh run with a new output name.</p>
+        <pre id="training-log">Waiting for a training run...</pre>
+      </section>
+
+      <section id="billing-panel" class="panel billing-panel"><div class="section-head"><div><p class="eyebrow">01 / BILLING</p><h3>Checkout lens</h3></div><span class="tag" id="billing-tag">OFFLINE</span></div>
+        <div class="billing-actions"><label>Model path<input id="model-path" value="best.pt"></label><label>Confidence <output id="confidence-output">0.55</output><input id="confidence" type="range" min="0.25" max="0.95" value="0.55" step="0.05"></label></div>
+        <div class="action-row"><button class="button primary" id="start-billing">Start billing</button><button class="button ghost" id="reset-billing">New customer</button><button class="button danger" id="stop-billing">Stop</button></div>
+        <div class="bill-total"><span>Current total</span><strong id="total">0.00</strong></div>
+        <div id="bill-items" class="bill-items"><p class="muted">No tracked items yet.</p></div>
+      </section>
+    </div>
+
+    <section id="prices-panel" class="panel prices-panel"><div class="section-head"><div><p class="eyebrow">04 / CATALOG</p><h3>Price book</h3></div><button class="button ghost" id="save-prices">Save prices</button></div><div id="price-list" class="price-list"></div><p class="muted">Names must exactly match your trained model classes.</p></section>
+    <footer><span>Bill Bot</span><span class="mono">LOCAL / PRIVATE / READY</span></footer>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

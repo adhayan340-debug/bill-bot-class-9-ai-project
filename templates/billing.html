@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}{% block title %}Billing | Bill Bot{% endblock %}{% block content %}
+<section class="page-hero">
+  <div>
+    <p class="eyebrow accent">01 / CHECKOUT</p>
+    <h2>Bill with<br><em>confidence.</em></h2>
+    <p class="hero-copy">Automatic item tracking, total calculation, and a clean customer-facing bill display from a single local platform.</p>
+  </div>
+  <div class="hero-note">
+    <span class="note-number">LIVE</span>
+    <strong>Detection session</strong>
+    <span>Reset between customers</span>
+  </div>
+</section>
+
+<section class="panel page-grid">
+  <div>
+    <div class="section-head">
+      <div><p class="eyebrow">CAMERA FEED</p><h3>Checkout lens</h3></div>
+      <span class="tag" id="billing-tag">OFFLINE</span>
+    </div>
+    <div class="feed-wrap feed-short">
+      <img src="{{ url_for('video_feed') }}" alt="ESP32-CAM billing feed">
+      <div class="feed-label">ESP32-CAM / BILLING</div>
+    </div>
+  </div>
+
+  <div class="side-stack">
+    <div class="config-card">
+      <label>Trained model<input id="model-path" value="best.pt"></label>
+      <label>Confidence <output id="confidence-output">0.35</output><input id="confidence" type="range" min="0.25" max="0.95" value="0.35" step="0.05"></label>
+    </div>
+
+    <div class="action-row">
+      <button class="button primary" id="start-billing">Start bill mode</button>
+      <button class="button ghost" id="reset-billing">New customer</button>
+      <button class="button danger" id="stop-billing">Stop</button>
+      <button class="button finalize" id="finalize-billing">Finalize bill</button>
+    </div>
+
+    <div class="bill-total panel-inline">
+      <span>Total</span>
+      <strong id="total">0.00</strong>
+    </div>
+
+    <div id="bill-items" class="bill-items">
+      <p class="muted">No tracked items yet.</p>
+    </div>
+    <pre id="bill-receipt" class="bill-receipt" hidden></pre>
+    <p class="muted" id="billing-message"></p>
+  </div>
+</section>
+{% endblock %}

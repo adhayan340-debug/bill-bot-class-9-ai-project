@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}{% block title %}Training | Bill Bot{% endblock %}{% block content %}
+<section class="page-hero"><div><p class="eyebrow accent">03 / MODEL LAB</p><h2>Teach the<br><em>checkout.</em></h2><p class="hero-copy">Train from the annotated YOLO dataset. Use a saved run for iteration or start a fresh retraining run.</p></div><div class="hero-note"><span class="note-number">LAB</span><strong>Dataset first</strong><span>Photos need boxes and class labels before training.</span></div></section>
+<section class="panel"><div class="section-head"><div><p class="eyebrow">TRAINING CONTROL</p><h3>Model workshop</h3></div><span class="tag" id="training-tag">IDLE</span></div>{% if not prices %}<div class="login-error"><strong>Set up the product catalog first.</strong><br>Add product names and prices in <a href="{{ url_for('prices_page') }}">Prices</a>, then use <a href="{{ url_for('capture_page') }}">Capture + label</a> to create trainable images.</div>{% else %}<div class="panel-inline"><strong>{{ prices|length }} product class{{ '' if prices|length == 1 else 'es' }} ready.</strong> Capture images with a selected Product label before training.</div>{% endif %}<div class="form-grid"><label>Dataset YAML<input id="data-path" value="dataset/data.yaml"></label><label>Base model<input id="base-model" value="yolo11n.pt"></label><label>Epochs<input id="epochs" type="number" value="50" min="1"></label><label>Batch size<input id="batch" type="number" value="8" min="1"></label></div><div class="training-progress" aria-live="polite"><div class="progress-heading"><span id="training-progress-label">Ready to train</span><strong id="training-progress-percent">0%</strong></div><div class="progress-track"><div class="progress-fill" id="training-progress-fill"></div></div><div class="progress-meta"><span id="training-progress-epoch">0 / 50 epochs</span><span id="training-progress-time">Waiting</span></div></div><div class="action-row"><button class="button primary" id="train-button">Train saved dataset</button><button class="button ghost" id="retrain-button">Retrain from base model</button></div><pre id="training-log">Waiting for a training run...</pre></section>
+<section class="panel dataset-panel">
+	<div class="section-head"><div><p class="eyebrow">DATASET / ANNOTATION</p><h3>Manage images and labels</h3></div><span class="tag" id="dataset-count">0 IMAGES</span></div>
+	<div class="dataset-upload">
+		<label>Add image files<input id="dataset-upload-files" type="file" accept="image/jpeg,image/png,image/webp,image/bmp" multiple></label>
+		<label>Add to split<select id="dataset-upload-split"><option value="train">Train</option><option value="val">Validation</option></select></label>
+		<button class="button primary" id="dataset-upload-button" type="button">Add images</button>
+	</div>
+	<p class="muted" id="dataset-status" aria-live="polite">Loading dataset...</p>
+	<div class="dataset-manager">
+		<div class="dataset-browser">
+			<div class="dataset-browser-head"><strong>Images</strong><label>Show<select id="dataset-filter"><option value="all">All</option><option value="train">Train</option><option value="val">Validation</option><option value="raw">Raw captures</option></select></label></div>
+			<div id="dataset-items" class="dataset-items"></div>
+		</div>
+		<div class="annotation-editor">
+			<div class="editor-heading"><strong id="annotation-filename">Select an image</strong><span id="annotation-split" class="mini-label"></span></div>
+			<div class="annotation-stage"><canvas id="annotation-canvas" aria-label="Image annotation canvas" hidden></canvas><p id="annotation-empty" class="muted">Choose an image to inspect or label it.</p></div>
+			<div class="editor-controls">
+				<label>Class for new boxes<select id="dataset-class">{% for name in prices %}<option value="{{ loop.index0 }}">{{ name }}</option>{% endfor %}</select></label>
+				<p class="muted">Drag on the image to draw a box. Adjust each box's class below.</p>
+				<div id="annotation-boxes" class="annotation-boxes"></div>
+			</div>
+			<div class="action-row editor-actions"><button class="button primary" id="dataset-save-labels" type="button" disabled>Save labels</button><button class="button danger" id="dataset-delete-image" type="button" disabled>Delete image</button></div>
+		</div>
+	</div>
+</section>
+{% endblock %}

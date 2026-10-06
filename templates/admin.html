@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}{% block title %}Admin | Bill Bot{% endblock %}{% block content %}
+<section class="page-hero admin-hero">
+  <div>
+    <p class="eyebrow accent">ADMIN CONTROL ROOM</p>
+    <h2>Run the<br><em>whole system.</em></h2>
+    <p class="hero-copy">Private operator controls for capture, labeling, training, pricing, and billing. This is the only place where the full workflow lives.</p>
+  </div>
+  <div class="hero-note">
+    <span class="note-number">ADMIN</span>
+    <strong>{{ session.get('admin_user') }}</strong>
+    <span>Private laptop session</span>
+  </div>
+</section>
+
+<section class="stats-grid reveal-delay-1">
+  <article class="stat-card">
+    <span class="mini-label">CAPTURED</span>
+    <strong id="capture-count">0</strong>
+    <small>photos saved</small>
+  </article>
+  <article class="stat-card">
+    <span class="mini-label">TOTAL</span>
+    <strong id="total">0.00</strong>
+    <small>current bill</small>
+  </article>
+  <article class="stat-card">
+    <span class="mini-label">STATUS</span>
+    <strong id="billing-tag">OFFLINE</strong>
+    <small>checkout mode</small>
+  </article>
+</section>
+
+<section class="admin-grid">
+  <article class="panel admin-card reveal-delay-2">
+    <div class="section-head">
+      <div><p class="eyebrow">OPERATOR / 01</p><h3>Camera + capture</h3></div>
+      <span class="status-dot" id="camera-dot"></span>
+    </div>
+    <div class="feed-wrap admin-feed">
+      <img src="{{ url_for('video_feed') }}" alt="ESP32-CAM live camera feed">
+      <div class="feed-label">ESP32-CAM / LIVE</div>
+    </div>
+    <div class="admin-card-foot">
+      <span class="muted"><strong id="capture-count-secondary">0</strong> photos captured</span>
+      <a class="button primary" href="{{ url_for('capture_page') }}">Open capture</a>
+    </div>
+  </article>
+
+  <article class="panel admin-card reveal-delay-3">
+    <div class="section-head">
+      <div><p class="eyebrow">OPERATOR / 02</p><h3>Billing session</h3></div>
+      <span class="tag" id="billing-tag-panel">OFFLINE</span>
+    </div>
+    <div class="billing-preview">
+      <div class="bill-total">
+        <span>Current total</span>
+        <strong id="total-panel">0.00</strong>
+      </div>
+      <div id="bill-items" class="bill-items"><p class="muted">No tracked items yet.</p></div>
+    </div>
+    <div class="admin-card-foot">
+      <span class="muted">Model detection and checkout</span>
+      <a class="button primary" href="{{ url_for('billing_page') }}">Open billing</a>
+    </div>
+  </article>
+</section>
+
+<section class="admin-actions panel reveal-delay-4">
+  <div>
+    <p class="eyebrow">PRIVATE TOOLS</p>
+    <h3>Model lab and catalog</h3>
+  </div>
+  <div class="quick-links">
+    <a href="{{ url_for('train_page') }}">
+      <span class="quick-icon">↗</span>
+      <strong>Train / retrain</strong>
+      <small>Improve recognition</small>
+    </a>
+    <a href="{{ url_for('prices_page') }}">
+      <span class="quick-icon">＋</span>
+      <strong>Manage prices</strong>
+      <small>Keep totals accurate</small>
+    </a>
+    <a href="{{ url_for('capture_page') }}">
+      <span class="quick-icon">◎</span>
+      <strong>Capture + label</strong>
+      <small>Build the dataset</small>
+    </a>
+    <a href="{{ url_for('billing_page') }}">
+      <span class="quick-icon">$</span>
+      <strong>Public checkout</strong>
+      <small>Customer billing view</small>
+    </a>
+  </div>
+</section>
+{% endblock %}
