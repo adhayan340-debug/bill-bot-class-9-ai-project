@@ -1,0 +1,12 @@
+.env
+.venv/
+.pio/
+__pycache__/
+*.pyc
+runs/
+*.pt
+dataset/raw/
+dataset/images/
+dataset/labels/
+dataset/labelled/
+billing_output/
